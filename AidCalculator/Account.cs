@@ -1,69 +1,102 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace AidCalculator
 {
-    public class Account
+    //Had to delete the actual enum USCountyState list b/c VS keeps crashing
+    enum USCountyStates
     {
+        Travis,
+        Williamson,
+        Hays
+
+    }
+
+    /// <summary>
+    /// This class represents an official account for each county representative to access and use
+    /// </summary>
+    class Account
+    {
+        private static int lastPinNumber = 1000;
+
         #region Properties
+
         /// <summary>
-        /// Unique pin number for city representative to use to access their mask bank account
+        /// Unique account pin number
         /// </summary>
-        public string PinNumber { get; set; }
+        public int PinNumber { get;  set; }
+
         /// <summary>
-        /// Official email address for city representative to receive email communications from mask bank
+        /// Account holder email address
         /// </summary>
         public string Email { get; set; }
+
         /// <summary>
-        /// Official phone number for city representative to receive calls from mask bank
+        /// Account holder phone number
         /// </summary>
         public string Phone { get; set; }
-        public string City { get; set; }
-        public USState State { get; set; }
-        public string ZipCode { get; set; }
+
         /// <summary>
-        /// Reported total population of the city
+        /// Enum list of all US Counties by State, e.g. 'Travis County of Texas'
+        /// </summary>
+        public USCountyStates USCountyState { get; set; }
+
+        /// <summary>
+        /// Reported total population of the county
         /// </summary>
         public int TotalPopulation { get; set; }
+
         /// <summary>
-        /// Reported percent of total population of the city residents who are over 80 years old
+        /// Reported total number of county residents
         /// </summary>
         public decimal PercentOver80 { get; set; }
+
         /// <summary>
-        /// Reported number of city residents over 80 years old who are currently showing or reporting symptoms of COVID-19
+        /// Reported number of county residents over 80 years old who are currently showing or reporting symptoms of COVID-19
         /// </summary>
         public int SymptomaticOver80 { get; set; }
+
         /// <summary>
-        /// Reported number of city residents over 80 who have recovered from COVID-19
+        /// Reported number of county residents over 80 who have recovered from COVID-19
         /// </summary>
         public int RecoveredOver80 { get; set; }
+
         /// <summary>
-        /// The date of the last request made by the city to the mask bank
+        /// The date of the last request made by the county to the mask bank
         /// </summary>
-        public DateTime LastRequest { get; set; }
-        public int MasksAssigned { get; set; }
+        public DateTime LastRequest { get; private set; }
+
+        /// <summary>
+        /// The number of masks assigned to each county per request
+        /// </summary>
+        public int MasksAssigned { get; private set; }
 
         #endregion
 
+
+        #region Constructor
+
+        public Account()
+        {
+            PinNumber = ++lastPinNumber;
+            LastRequest = DateTime.Now;
+        }
+        #endregion
+
+
         #region Methods
 
-        public void UpdateSymptomaticOver80(int quantity)
+        /// <summary>
+        /// Update the number of symptomatic residents over 80
+        /// </summary>
+        /// <param name="quantity">New symptomatic over 80 number</param>
+        public void Calculate(int quantity)
         {
             //SymptomaticOver80 = SymptomaticOver80 + quantity 
             SymptomaticOver80 += quantity;
         }
 
-        public void UpdateRecoveredOver80(int quantity)
-        {
-            //RecoveredOver80 = RecoveredOver80 + quantity 
-            RecoveredOver80 += quantity;
-        }
-
         #endregion
     }
-
-    public enum USState
-    {
-        Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware, Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina, North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia, Wisconsin, Wyoming,
-    }
-    
 }
